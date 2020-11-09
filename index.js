@@ -12,9 +12,20 @@ app.get('/', (req, res) => {
   res.sendFile(__dirname + '/public/index.html');
 });
 
-// socket.io routes
+// socket.io routes & socket actions
 io.on('connection', (socket) => {
   console.log('a user connected');
+  socket.broadcast.emit('hi');
+
+  socket.on('disconnect', () => {
+    console.log('user disconnected');
+  });
+  socket.on('chat message', (msg) => {
+    console.log('message: ' + msg);
+  });
+  socket.on('chat message', (msg) => {
+    io.emit('chat message', msg);
+  });
 });
 
 // We make the http server listen on port 3000
